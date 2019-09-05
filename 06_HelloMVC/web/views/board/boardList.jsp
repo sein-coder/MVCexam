@@ -6,6 +6,7 @@
 
 <% 
 	List<Board> list = (List<Board>)request.getAttribute("list");
+	int cPage = (int)request.getAttribute("cPage");
 %>
 
 
@@ -23,15 +24,21 @@ div#pageBar span.cPage{color: #0066ff;}
 
 	<section id="board-container">
 		<h2>게시판 </h2>
-		<% if(loginMember.getUserId()!=null) { %>
-			<input type="button" value="글쓰기" id="btn-add">
+		<% if(loginMember!=null) { %>
+			<input type="button" value="글쓰기" id="btn-add" onclick="fn_boardForm()">
 		<% } %>
 		<script>
-			$(function(){
+			<%-- $(function(){
 				$("#btn-add").click(function(){
 					location.href="<%= request.getContextPath() %>/board/boardWrite";
 				});
-			});
+			}); --%>
+			
+			function fn_boardForm(){
+				location.href='<%=request.getContextPath()%>/board/boardWrite';
+			}
+			
+			
 		</script>
 		<table id="tbl-board">
 			<tr>
@@ -43,11 +50,18 @@ div#pageBar span.cPage{color: #0066ff;}
 				<th>조회수</th>
 			</tr>
 		<!--내용작성-->
+			<% if(list.isEmpty()) { %>
+				<tr>
+					<td colspan="6">
+						등록된 게시글이 없습니다.
+					</td>
+				</tr>
+			<% } else { %>
 			<% for(Board b : list) { %>
 			<tr>
 				<td><%= b.getBoard_No() %></td>
 				<td>
-					<a href="<%=request.getContextPath()%>/board/boardView?board_No=<%=b.getBoard_No()%>"><%= b.getBoard_Title() %></a>
+					<a href="<%=request.getContextPath()%>/board/boardView?board_No=<%=b.getBoard_No()%>&cPage=<%=cPage%>"><%= b.getBoard_Title() %></a>
 				</td>
 				<td><%= b.getBoard_Writer() %></td>
 				<td><%= b.getBoard_Date() %></td>
@@ -58,7 +72,8 @@ div#pageBar span.cPage{color: #0066ff;}
 				</td>
 				<td><%= b.getBoard_ReadCount() %></td>
 			</tr>
-			<% } %>
+			<% }  %>
+			<% }  %>
 		</table>
 		<!--pageBar도 있어야함-->
 		<div id="pageBar">

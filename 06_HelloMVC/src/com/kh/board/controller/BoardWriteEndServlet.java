@@ -15,6 +15,8 @@ import com.kh.board.model.vo.Board;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import common.policy.MyFileRenamePolicy;
+
 /**
  * Servlet implementation class BoardWriteEndServlet
  */
@@ -36,21 +38,21 @@ public class BoardWriteEndServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		if(!ServletFileUpload.isMultipartContent(request)) {
 			request.setAttribute("msg", "게시판 글작성 파일업로드 오류");
-			request.setAttribute("loc", "/");
+			request.setAttribute("loc", "/board/boardWrite");
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 			return;
 		}
 
 		String saveDir = getServletContext().getRealPath("/upload/board");
-		int maxSize = 1024*1024*10;
+		int maxSize = 1024*1024*1024;
 		
-		MultipartRequest mr = new MultipartRequest(request, saveDir, maxSize, "UTF-8", new DefaultFileRenamePolicy());
+		MultipartRequest mr = new MultipartRequest(request, saveDir, maxSize, "UTF-8", new MyFileRenamePolicy());
 		
 		String title = mr.getParameter("title");
 		String writer = mr.getParameter("writer");
 		String content = mr.getParameter("content");
 		String fileName = mr.getFilesystemName("up_file");
-		String oriFileName = (mr.getParameter("ori_file")).replace("C:\\fakepath\\" , "");
+		String oriFileName = mr.getOriginalFileName("up_file");
 		
 		Board b = new Board();
 		
@@ -61,14 +63,23 @@ public class BoardWriteEndServlet extends HttpServlet {
 		b.setBoard_Original_FileName(oriFileName);
 		
 		int result = new BoardService().insertBoard(b);
+		//같은 session에서 nextval한 직후에 currval로 바로 가져올 수 있다.
+		
+		
+		String msg = "";
+		String loc = "";
+		String view = "/views/common/msg.jsp";
 		
 		if(result>0) {
-			request.getRequestDispatcher("/board/boardList").forward(request, response);;
+			loc = "/board/boardView?board_No="+result;
+			msg = "게시글 등록 성공";
 		}else {
-			request.setAttribute("msg", "글쓰기 실패");
-			request.setAttribute("loc", "/");
-			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+			msg = "게시글등록실패";
+			loc = "/board/boardForm";
 		}
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+		request.getRequestDispatcher(view).forward(request, response);
 		
 	}
 

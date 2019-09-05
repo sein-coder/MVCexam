@@ -46,20 +46,25 @@ table#tbl-board td {border:1px solid; padding: 5px 0 5px 10px; text-align:left;}
 				<th>내 용</th>
 				<td><%= b.getBoard_Content() %></td>
 			</tr>
-			<%--글작성자/관리자인경우 수정삭제 가능 --%>
 			<tr>
 				<th colspan="2">
+					<input type="button" value="목록으로" onclick="fn_listBoard();">
+			<%--글작성자/관리자인경우 수정삭제 가능 --%>
+			<% if(loginMember!=null && ( loginMember.getUserId().equals("admin") || loginMember.getUserId().equals(b.getBoard_Writer()) ) ) { %>
 					<input type="button" value="수정하기" onclick="fn_updateBoard()">
 					<input type="button" value="삭제하기" onclick="fn_deleteBoard()">
+			<% } %>
 				</th>
 			</tr>
-			
 
 		</table>
 
     <script>
+	function fn_listBoard() {
+		location.href='<%=request.getContextPath()%>/board/boardList?cPage=<%=request.getAttribute("cPage")!=null?request.getAttribute("cPage"):"1"%>';
+	}
     function fn_updateBoard(){
-        
+      
     }
     function fn_deleteBoard(){
        

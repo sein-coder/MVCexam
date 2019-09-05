@@ -16,22 +16,21 @@ table#tbl-board td {border:1px solid; padding: 5px 0 5px 10px; text-align:left;}
         <table id="tbl-board">
         <tr>
             <th>제 목</th>
-            <td><input type="text" name="title" required></td>
+            <td><input type="text" name="title" id="title" required></td>
         </tr>
         <tr>
             <th>작성자</th>
-            <td><input type="text" name="writer" value="<%= loginMember.getUserId() %>" readonly required/></td>
+            <td><input type="text" name="writer" id="writer" value="<%= loginMember.getUserId() %>" readonly required/></td>
         </tr>
         <tr>
             <th>첨부파일</th>
             <td>
             	<input type="file" name="up_file" id="up_file">
-            	<input type="hidden" name="ori_file" id="ori_file">
             </td>
         </tr>
         <tr>
             <th>내 용</th>
-            <td><textarea rows="5" cols="50" name="content"></textarea></td>
+            <td><textarea rows="5" cols="50" name="content" id="content"></textarea></td>
         </tr>
         <tr>
             <th colspan="2">
@@ -40,14 +39,6 @@ table#tbl-board td {border:1px solid; padding: 5px 0 5px 10px; text-align:left;}
         </tr>
     </table>
     </form>
-    
-    <script>
-    	$("#up_file").change(function(){
-    		$("#ori_file").val($("#up_file").val());
-    		console.log($("#ori_file").val())
-    		console.log($("#up_file").val())
-    	})
-    </script>
     
     </section>
 
