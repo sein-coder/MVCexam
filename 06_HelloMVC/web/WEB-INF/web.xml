@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>06_HelloMVC</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+<!--    <filter>
+ 	<filter-name>encoding</filter-name>
+ 	<filter-class>common.filter.CharacterEncodingFilter</filter-class>
+ </filter>
+  
+   <filter-mapping>
+ 	<filter-name>encoding</filter-name>
+ 	<url-pattern>/*</url-pattern>
+ 	모든 .do 확장자를 가진 파일들은 encoding필터를 거치게 맵핑한다는 뜻
+  </filter-mapping> -->
+  
+<error-page>
+	<!-- <exception-type>java.lang.NullPointerException</exception-type> -->
+	<error-code>500</error-code>
+	<location>/views/common/error.jsp</location>
+</error-page>
+  
+  
+</web-app>
