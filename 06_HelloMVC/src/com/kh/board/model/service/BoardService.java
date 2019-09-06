@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.kh.board.model.dao.BoardDao;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.BoardComment;
 import com.sun.org.apache.regexp.internal.recompile;
 
 import static common.template.JDBCTemplate.getConnection;
@@ -53,6 +54,38 @@ public class BoardService {
 			commit(conn);
 			}
 		else {rollback(conn);}
+		close(conn);
+		return result;
+	}
+
+	public int insertBoardComment(BoardComment bc) {
+		Connection conn = getConnection();
+		int result = dao.insertComment(conn, bc);
+		if(result>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
+
+	public List<BoardComment> selectBoardComment(int board_No) {
+		Connection conn = getConnection();
+		List<BoardComment> list = dao.selectBoardComment(conn, board_No);
+		
+		close(conn);
+		return list;
+	}
+
+	public int deleteComment(int boardRef, int boardCommentNo) {
+		Connection conn = getConnection();
+		int result = dao.deleteComment(conn,boardRef,boardCommentNo);
+		if(result>0	) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
 		close(conn);
 		return result;
 	}

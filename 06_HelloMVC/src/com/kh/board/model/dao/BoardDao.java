@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.BoardComment;
 
 import oracle.jdbc.proxy.annotation.Pre;
 
@@ -174,6 +175,77 @@ public class BoardDao {
 		}finally {
 			close(rs);
 			close(stmt);
+		}
+		return result;
+	}
+
+
+	public int insertComment(Connection conn, BoardComment bc) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("insertComment");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bc.getBoardCommentLevel());
+			pstmt.setString(2, bc.getBoardCommentWriter());
+			pstmt.setString(3, bc.getBoardCommentContent());
+			pstmt.setInt(4, bc.getBoardRef());
+			
+			//int형 자료형에 자료가 없이 null값을 넣을 때는
+			//아래와 같이 강제로 형변환하여 값을 넣으면 오라클은 알아서 다시 형변환하여 값을 넣어준다.
+			pstmt.setString(5, bc.getBoardCommentRef()==0?null:String.valueOf(bc.getBoardCommentRef()));
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public List<BoardComment> selectBoardComment(Connection conn, int board_No) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<BoardComment> list = new ArrayList();
+		String sql = prop.getProperty("selectBoardComment");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, board_No);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardComment bc = new BoardComment();
+				bc.setBoardCommentNo(rs.getInt("board_comment_no"));
+				bc.setBoardCommentLevel(rs.getInt("board_comment_level"));
+				bc.setBoardCommentWriter(rs.getString("board_comment_writer"));
+				bc.setBoardCommentContent(rs.getString("board_comment_content"));
+				bc.setBoardRef(rs.getInt("board_ref"));
+				bc.setBoardCommentRef(rs.getInt("board_comment_ref"));
+				bc.setBoardCommentDate(rs.getDate("board_comment_date"));
+				list.add(bc);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}return list;
+	}
+
+
+	public int deleteComment(Connection conn, int boardRef, int boardCommentNo) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("deleteComment");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardRef);
+			pstmt.setInt(2, boardCommentNo);
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
 		}
 		return result;
 	}

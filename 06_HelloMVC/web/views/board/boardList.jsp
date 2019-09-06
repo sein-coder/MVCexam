@@ -67,7 +67,7 @@ div#pageBar span.cPage{color: #0066ff;}
 				<td><%= b.getBoard_Date() %></td>
 				<td>
 					<% if(b.getBoard_Original_FileName()!=null) { %>
-						<img src="<%=request.getContextPath()%>/images/file.png">
+						<img src="<%=request.getContextPath()%>/images/file.png" width="16px">
 					<% } %>
 				</td>
 				<td><%= b.getBoard_ReadCount() %></td>
