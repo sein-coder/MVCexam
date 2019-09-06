@@ -100,6 +100,9 @@
             <li id="gallary">
                 <a href="#">사진게시판</a>
             </li>
+            <li id="webCompiler">
+            	<a href="<%= request.getContextPath() %>/webCopiler/webCopilerView">웹 컴파일러</a>
+            </li>
             <% if(loginMember!=null && loginMember.getUserId().equals("admin")) { %>
             <li id="admin-member">
             	<a href="<%=request.getContextPath()%>/admin/memberList">회원관리
