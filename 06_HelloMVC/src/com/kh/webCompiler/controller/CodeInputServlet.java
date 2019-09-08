@@ -2,11 +2,13 @@ package com.kh.webCompiler.controller;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,27 +41,17 @@ public class CodeInputServlet extends HttpServlet {
 		String inputCode = request.getParameter("inputcode");
 		
 		String saveDir = getServletContext().getRealPath("/upload/inputCode");
+		
 		File f = new File(saveDir+"/"+"Code.java");
 		if(!(f.exists())) {
 			f.createNewFile();
 		}
-		BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(f));
+	
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f),"MS949"));
+		writer.write(inputCode);
+		writer.close();
 		
-		bo.write(inputCode.getBytes());
-		
-		bo.close();
-		
-		new webCompilerService().Compile(lang,f);
-		
-//		Runtime.getRuntime().exec(f.getPath());
-		
-//		bo.write(inputCode.getBytes());
-		
-		/*
-		 * File file = new File(request.getContextPath()+"/upload/inputCode/test.java");
-		 */
-		
-
+		new webCompilerService().compile(lang,f);
 	}
 
 	/**
