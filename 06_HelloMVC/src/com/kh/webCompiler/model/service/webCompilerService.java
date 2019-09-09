@@ -13,10 +13,10 @@ public class webCompilerService {
 	public void compile(String lang, File f) {
 		switch (lang) {
 		case "Java":
-			javaCompile(new File("C:\\Users\\sein\\git\\MVCexam\\06_HelloMVC\\web\\upload\\inputCode\\Code.java"));
+			javaCompile(f);
 			break;
 
-		default:
+		case "Python":
 			break;
 		}
 		
@@ -38,6 +38,14 @@ public class webCompilerService {
 			String line;
 			while((line = bs.readLine())!=null) {
 				System.out.println(line);
+			}
+			
+			InputStream eis = pro.getErrorStream();
+			InputStreamReader eisr = new InputStreamReader(eis,"MS949");
+			BufferedReader ebs = new BufferedReader(eisr);
+			String eline;
+			while((eline = ebs.readLine())!=null) {
+				System.out.println(eline);
 			}
 		}
 		catch (Exception e) {
